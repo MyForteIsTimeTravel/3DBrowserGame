@@ -5,8 +5,20 @@ const WIDTH     = window.innerWidth;
 const HEIGHT    = window.innerHeight;
 const container = document.querySelector('#cont');
 
-var mouseX = 0;
-var mouseY = 0;
+const centralX = WIDTH / 2;
+const centralY = HEIGHT / 2;
+
+var mouseX;
+var mouseY;
+var deadZone = 64;
+
+var lastMouseX;
+var lastMouseY;
+
+var wDown = false;
+var aDown = false;
+var sDown = false;
+var dDown = false;
 
 /* * * * * * * * * * * * * * * *
  * Setup WebGL stuff
@@ -84,9 +96,30 @@ scene.add(sphereThree);
 /* * * * * * * * * * * * * * * *
  * Handle Input
  * * * * * * * * * * * * * * * */
-function updateInput (event) {
+function updateMouseInput (event) {
+    lastMouseX = mouseX;
+    lastMouseY = mouseY;
+    
     mouseX = event.clientX
     mouseY = event.clientY
+}
+
+function updateKeyDown (event) {
+    switch (event.keyCode) {
+        case 87: wDown = true; break;
+        case 65: aDown = true; break;
+        case 83: sDown = true; break;
+        case 68: dDown = true; break;
+    }
+}
+
+function updateKeyUp (event) {
+    switch (event.keyCode) {
+        case 87: wDown = false; break;
+        case 65: aDown = false; break;
+        case 83: sDown = false; break;
+        case 68: dDown = false; break;
+    } 
 }
 
 /* * * * * * * * * * * * * * * *
@@ -96,10 +129,15 @@ function update () {
     // timer
     var date = new Date();
     var tick = date.getSeconds();
-
-    // animate the light source
-    pointLight.position.x = mouseX;
-    pointLight.position.y = mouseY;
+    
+    // check input
+    if (wDown) { camera.translateZ(-4); }
+    if (aDown) { camera.translateX(-4); }
+    if (sDown) { camera.translateZ(4);  }
+    if (dDown) { camera.translateX(4);  }
+    
+    if (mouseX > centralX + deadZone) { camera.rotation.y -= 0.0075;}
+    if (mouseX < centralX - deadZone) { camera.rotation.y += 0.0075;}
     
     // Draw the scene
     renderer.render(scene, camera); 

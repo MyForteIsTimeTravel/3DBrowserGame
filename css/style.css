@@ -1,3 +1,6 @@
+/* Hide Cursor */
+* {cursor: none;}
+
 body {
     background-color: #202020;
     font-family: sans-serif;

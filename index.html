@@ -5,15 +5,11 @@
         <meta charset="utf-8">
         <meta name="author"   content="Ryan Needham"/>
         <meta name="viewport" content="width=device-width">
-        
         <link rel="stylesheet" href="css/style.css"
     </head>
-    <body>
-        <div id="header">
-            <h1>Assignment Two</h1>
-        </div>
-        
-        <div onmousemove="updateInput(event)" id="cont"></div>
+    <body onkeydown="updateKeyDown(event)" onkeyup="updateKeyUp(event)">
+        <div id="header"><h1>Assignment Two</h1></div>
+        <div onmousemove="updateMouseInput(event)" id="cont"></div>
         <script src="js/three.min.js"></script>
         <script src="js/Main.js"></script>
     </body>
