@@ -1,28 +1,33 @@
-/* * * * * * * * * * * * * * * *
- * Window info
- * * * * * * * * * * * * * * * */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *  Main.js
+ *
+ *  An attempt at a 3D  game engine in JavaScript
+ *  using WebGL and Three.js
+ *
+ *  Ryan Needham
+ * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+// Window Properties
 const WIDTH     = window.innerWidth;
 const HEIGHT    = window.innerHeight;
+const centralX  = WIDTH / 2;
+const centralY  = HEIGHT / 2;
 const container = document.querySelector('#cont');
 
-const centralX = WIDTH / 2;
-const centralY = HEIGHT / 2;
-
+// Mouse Input Parameters
 var mouseX;
 var mouseY;
 var deadZone = 64;
 
-var lastMouseX;
-var lastMouseY;
-
+// Keyboard Input Parameters
 var wDown = false;
 var aDown = false;
 var sDown = false;
 var dDown = false;
 
-/* * * * * * * * * * * * * * * *
+/* * * * * * * * * * * * * *
  * Setup WebGL stuff
- * * * * * * * * * * * * * * * */
+ * * * * * * * * * * * * * */
 const VIEW_ANGLE = 45;
 const ASPECT     = WIDTH / HEIGHT;
 const NEAR       = 0.1;
@@ -48,9 +53,9 @@ renderer.shadowMapType    = THREE.PCFSoftShadowMap;
 // attach to container
 container.appendChild(renderer.domElement);
 
-/* * * * * * * * * * * * * * * *
+/**
  * Lighting Stuff
- * * * * * * * * * * * * * * * */
+ */
 const pointLight = new THREE.PointLight(0xFFFFFF);
 pointLight.position.x = 10;
 pointLight.position.y = 300;
@@ -69,7 +74,7 @@ const RINGS     = 16;
 
 const object_1 = new THREE.Mesh(
     new THREE.SphereGeometry(RADIUS, SEGMENTS, RINGS),  // Mesh
-    new THREE.MeshLambertMaterial({color: 0xA52A2A})    // shader
+    new THREE.MeshLambertMaterial({color: 0x990000})    // shader
 );
 
 object_1.castShadow     = true;
@@ -80,7 +85,7 @@ scene.add(object_1);
 
 const object_2 = new THREE.Mesh(
     new THREE.CubeGeometry(48, 48, 48),  // Mesh
-    new THREE.MeshLambertMaterial({color: 0xA52A2A})    // shader
+    new THREE.MeshLambertMaterial({color: 0x800000})    // shader
 );
 
 object_2.castShadow     = true;
@@ -91,8 +96,8 @@ object_2.position.z     = -500;
 scene.add(object_2);
 
 const object_3 = new THREE.Mesh(
-    new THREE.SphereGeometry(RADIUS, SEGMENTS, RINGS),  // Mesh
-    new THREE.MeshLambertMaterial({color: 0xA52A2A})    // shader
+    new THREE.CubeGeometry(48, 48, 48),
+    new THREE.MeshLambertMaterial({color: 0x800000})    // shader
 );
 
 object_3.castShadow     = true;
@@ -145,10 +150,9 @@ function updateKeyUp (event) {
 /* * * * * * * * * * * * * * * *
  * ON UPDATE
  * * * * * * * * * * * * * * * */
+var tick = 0;
 function update () {
-    // timer
-    var date = new Date();
-    var tick = date.getSeconds();
+    tick += 1;
     
     // check input
     if (wDown) { camera.translateZ(-4); }
@@ -160,6 +164,11 @@ function update () {
     if (mouseX < centralX - deadZone) { camera.rotation.y += 0.0075;}
     //if (mouseY > centralY + deadZone) { camera.rotation.x -= 0.0075;}
     //if (mouseY < centralY - deadZone) { camera.rotation.x += 0.0075;}
+    
+    // rotate objects
+    object_1.position.y += Math.cos(tick / 10);
+    object_2.rotation.y += 0.005;
+    object_3.rotation.y -= 0.005;
     
     // Draw the scene
     renderer.render(scene, camera); 
