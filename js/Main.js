@@ -43,7 +43,7 @@ scene.add(camera);
 // start rendering
 renderer.setSize(WIDTH, HEIGHT);
 renderer.shadowMapEnabled = true;
-renderer.shadowMapType = THREE.PCFSoftShadowMap;
+renderer.shadowMapType    = THREE.PCFSoftShadowMap;
 
 // attach to container
 container.appendChild(renderer.domElement);
@@ -55,7 +55,7 @@ const pointLight = new THREE.PointLight(0xFFFFFF);
 pointLight.position.x = 10;
 pointLight.position.y = 300;
 pointLight.position.z = 145;
-pointLight.rotation = 45 * (Math.PI / 180);
+pointLight.rotation   = 20 * (Math.PI / 180);
 pointLight.castShadow = true;
 pointLight.shadowDarkness = 0.5;
 scene.add(pointLight);
@@ -67,40 +67,40 @@ const RADIUS    = 50;
 const SEGMENTS  = 16;
 const RINGS     = 16;
 
-const sphereOne = new THREE.Mesh(
+const object_1 = new THREE.Mesh(
     new THREE.SphereGeometry(RADIUS, SEGMENTS, RINGS),  // Mesh
     new THREE.MeshLambertMaterial({color: 0xA52A2A})    // shader
 );
 
-const sphereTwo = new THREE.Mesh(
+object_1.castShadow     = true;
+object_1.receiveShadow  = true;
+object_1.position.y     = 46;
+object_1.position.z     = -300;
+scene.add(object_1);
+
+const object_2 = new THREE.Mesh(
     new THREE.CubeGeometry(48, 48, 48),  // Mesh
     new THREE.MeshLambertMaterial({color: 0xA52A2A})    // shader
 );
 
-const sphereThree = new THREE.Mesh(
+object_2.castShadow     = true;
+object_2.receiveShadow  = true;
+object_2.position.x    -= 200;
+object_2.position.y     = 40;
+object_2.position.z     = -500;
+scene.add(object_2);
+
+const object_3 = new THREE.Mesh(
     new THREE.SphereGeometry(RADIUS, SEGMENTS, RINGS),  // Mesh
     new THREE.MeshLambertMaterial({color: 0xA52A2A})    // shader
 );
 
-sphereOne.castShadow = true;
-sphereTwo.receiveShadow = true;
-sphereOne.position.y = 46;
-sphereOne.position.z = -300;
-scene.add(sphereOne);
-
-sphereTwo.castShadow = true;
-sphereTwo.receiveShadow = true;
-sphereTwo.position.x -= 200;
-sphereTwo.position.y = 40;
-sphereTwo.position.z = -500;
-scene.add(sphereTwo);
-
-sphereThree.castShadow = true;
-sphereThree.receiveShadow = true
-sphereThree.position.x += 200;
-sphereThree.position.y = 40;
-sphereThree.position.z = -500;
-scene.add(sphereThree);
+object_3.castShadow     = true;
+object_3.receiveShadow  = true
+object_3.position.x    += 200;
+object_3.position.y     = 40;
+object_3.position.z     = -500;
+scene.add(object_3);
 
 const floor = new THREE.Mesh ( 
     new THREE.PlaneGeometry(WIDTH * 2, WIDTH * 2, 50, 50), 
@@ -109,10 +109,8 @@ const floor = new THREE.Mesh (
 );
 
 floor.receiveShadow = true;
-
-floor.position.y = -20;
-floor.rotation.x = 90 * (Math.PI / 180);
-
+floor.position.y    = -20;
+floor.rotation.x    = 90 * (Math.PI / 180);
 scene.add(floor);
 
 /* * * * * * * * * * * * * * * *
