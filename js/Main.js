@@ -49,14 +49,35 @@ const RADIUS    = 50;
 const SEGMENTS  = 16;
 const RINGS     = 16;
 
-const sphere = new THREE.Mesh(
+const sphereOne = new THREE.Mesh(
     new THREE.SphereGeometry(RADIUS, SEGMENTS, RINGS),  // Mesh
     new THREE.MeshLambertMaterial({color: 0xA52A2A})    // shader
 );
 
-sphere.position.z = -300;
-sphere.position.y = 24;
-scene.add(sphere);
+const sphereTwo = new THREE.Mesh(
+    new THREE.SphereGeometry(RADIUS, SEGMENTS, RINGS),  // Mesh
+    new THREE.MeshLambertMaterial({color: 0xA52A2A})    // shader
+);
+
+const sphereThree = new THREE.Mesh(
+    new THREE.SphereGeometry(RADIUS, SEGMENTS, RINGS),  // Mesh
+    new THREE.MeshLambertMaterial({color: 0xA52A2A})    // shader
+);
+
+sphereOne.position.z = -300;
+sphereOne.position.y = 24;
+scene.add(sphereOne);
+
+sphereTwo.position.z = -500;
+sphereTwo.position.y = 18;
+sphereTwo.position.x -= 200;
+scene.add(sphereTwo);
+
+sphereThree.position.z = -500;
+sphereThree.position.y = 18;
+sphereThree.position.x += 200;
+scene.add(sphereThree);
+
 
 /* * * * * * * * * * * * * * * *
  * ON UPDATE
