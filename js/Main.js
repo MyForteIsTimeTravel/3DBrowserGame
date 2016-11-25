@@ -33,18 +33,25 @@ function captureMouse() {
                 document.webkitPointerLockElement === container) {
                 // Enable the mousemove listener
                 document.addEventListener("mousemove", moveCallback, false)
+                document.getElementById("heading").innerHTML=""
                 document.getElementById("playing").innerHTML="playing..."
                 container.style.filter = "blur(0px)"
+                
+                // unpause game
+                paused = false
                 
             } else {
                 // Disable the mousemove listener
                 document.removeEventListener("mousemove", moveCallback, false)
-                document.getElementById("playing").innerHTML="Click to play"
-                container.style.filter = "blur(12px)"
+                document.getElementById("playing").innerHTML="click to resume"
+                container.style.filter = "blur(16px)"
                                 
                 // stop drift
                 mouseMovementX = 0
                 mouseMovementY = 0
+                
+                // pause game
+                paused = true
             }
         }
 
@@ -106,7 +113,7 @@ const camera   = new THREE.PerspectiveCamera(
 const scene      = new THREE.Scene()
 scene.background = new THREE.Color(0x202020)
 scene.add(camera)
-
+camera.position.z = 100
 camera.lookAt(lookVelocity)
 
 // start rendering
@@ -137,13 +144,13 @@ const RINGS     = 16;
 
 const object_1 = new THREE.Mesh(
     new THREE.SphereGeometry(RADIUS, SEGMENTS, RINGS),  // Mesh
-    new THREE.MeshLambertMaterial({color: 0x990000})    // shader
+    new THREE.MeshLambertMaterial({color: 0xFF9800})    // shader
 );
 
 object_1.castShadow     = true
 object_1.receiveShadow  = true
 object_1.position.y     = 46
-object_1.position.z     = -300
+object_1.position.z     = -200
 scene.add(object_1);
 
 const object_2 = new THREE.Mesh(
@@ -155,7 +162,7 @@ object_2.castShadow     = true
 object_2.receiveShadow  = true
 object_2.position.x    -= 200
 object_2.position.y     = 40
-object_2.position.z     = -500
+object_2.position.z     = -400
 scene.add(object_2)
 
 const object_3 = new THREE.Mesh(
@@ -167,12 +174,12 @@ object_3.castShadow     = true
 object_3.receiveShadow  = true
 object_3.position.x    += 200
 object_3.position.y     = 40
-object_3.position.z     = -500
+object_3.position.z     = -400
 scene.add(object_3);
 
 const floor = new THREE.Mesh ( 
     new THREE.PlaneGeometry(WIDTH * 2, WIDTH * 2, 50, 50), 
-    new THREE.MeshLambertMaterial( { color: 0xAAAAAA, side: THREE.DoubleSide})
+    new THREE.MeshLambertMaterial( { color: 0x4E342E, side: THREE.DoubleSide})
 )
 
 floor.receiveShadow = true
