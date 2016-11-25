@@ -64,18 +64,18 @@ const sphereThree = new THREE.Mesh(
     new THREE.MeshLambertMaterial({color: 0xA52A2A})    // shader
 );
 
-sphereOne.position.z = -300;
 sphereOne.position.y = 24;
+sphereOne.position.z = -300;
 scene.add(sphereOne);
 
-sphereTwo.position.z = -500;
-sphereTwo.position.y = 18;
 sphereTwo.position.x -= 200;
+sphereTwo.position.y = 18;
+sphereTwo.position.z = -500;
 scene.add(sphereTwo);
 
-sphereThree.position.z = -500;
-sphereThree.position.y = 18;
 sphereThree.position.x += 200;
+sphereThree.position.y = 18;
+sphereThree.position.z = -500;
 scene.add(sphereThree);
 
 
