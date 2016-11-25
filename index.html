@@ -8,9 +8,20 @@
         <link rel="stylesheet" href="css/style.css"
     </head>
     <body onkeydown="updateKeyDown(event)" onkeyup="updateKeyUp(event)">
-        <div id="header"><h1>Assignment Two</h1></div>
-        <div onmousemove="moveCallback(event)" id="cont"></div>
+        
+        <!-- Header -->
+        <div onmousedown="captureMouse()" id="header">
+            <h1 id="heading">Assignment Two</h1>
+            <p  id="playing">Click to play</p>
+        </div>
+        
+        <!-- Canvas Container -->
+        <div id="cont"></div>
+        
+        <!-- Frameworks and Libraries -->
         <script src="js/three.min.js"></script>
-        <script src="js/Main.js"></script>
+        
+        <!-- Home Baked Goodies -->
+        <script src="js/main.js"></script>
     </body>
 </html>
