@@ -6,7 +6,6 @@
  *
  *  Ryan Needham
  * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
 // Window Properties
 const WIDTH     = window.innerWidth;
 const HEIGHT    = window.innerHeight;
@@ -14,9 +13,13 @@ const centralX  = WIDTH / 2;
 const centralY  = HEIGHT / 2;
 const container = document.querySelector('#cont');
 
-// Mouse Input Parameters
+/* * * * * * * * * * * * * *
+ * Input Handling
+ * * * * * * * * * * * * * */
 var mouseX;
 var mouseY;
+var lastMouseX;
+var lastMouseY;
 var deadZone = 64;
 
 // Keyboard Input Parameters
@@ -47,8 +50,8 @@ scene.add(camera);
 
 // start rendering
 renderer.setSize(WIDTH, HEIGHT);
-renderer.shadowMapEnabled = true;
-renderer.shadowMapType    = THREE.PCFSoftShadowMap;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type    = THREE.PCFSoftShadowMap;
 
 // attach to container
 container.appendChild(renderer.domElement);
@@ -62,7 +65,6 @@ pointLight.position.y = 300;
 pointLight.position.z = 145;
 pointLight.rotation   = 20 * (Math.PI / 180);
 pointLight.castShadow = true;
-pointLight.shadowDarkness = 0.5;
 scene.add(pointLight);
 
 /* * * * * * * * * * * * * * * *
@@ -121,12 +123,12 @@ scene.add(floor);
 /* * * * * * * * * * * * * * * *
  * Handle Input
  * * * * * * * * * * * * * * * */
-function updateMouseInput (event) {
+function moveCallback (event) {
     lastMouseX = mouseX;
     lastMouseY = mouseY;
     
-    mouseX = event.clientX
-    mouseY = event.clientY
+    mouseX = event.clientX;// - lastMouseX;
+    mouseY = event.clientY;// - lastMouseY;
 }
 
 function updateKeyDown (event) {
@@ -135,6 +137,10 @@ function updateKeyDown (event) {
         case 65: aDown = true; break;
         case 83: sDown = true; break;
         case 68: dDown = true; break;
+    }
+    
+    if (event.keyCode == 27) {
+
     }
 }
 
@@ -160,10 +166,8 @@ function update () {
     if (sDown) { camera.translateZ(4);  }
     if (dDown) { camera.translateX(4);  }
     
-    if (mouseX > centralX + deadZone) { camera.rotation.y -= 0.0075;}
-    if (mouseX < centralX - deadZone) { camera.rotation.y += 0.0075;}
-    //if (mouseY > centralY + deadZone) { camera.rotation.x -= 0.0075;}
-    //if (mouseY < centralY - deadZone) { camera.rotation.x += 0.0075;}
+    if (mouseX > centralX + deadZone) { camera.rotation.y -= 0.0082;}
+    if (mouseX < centralX - deadZone) { camera.rotation.y += 0.0082;}
     
     // rotate objects
     object_1.position.y += Math.cos(tick / 10);
