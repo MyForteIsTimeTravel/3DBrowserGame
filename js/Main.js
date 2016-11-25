@@ -64,10 +64,10 @@ scene.add(sphere);
 function update () {
     // timer
     var date = new Date();
-    var tick = date.getMilliseconds();
+    var tick = date.getSeconds();
     
     // animate the light source
-    pointLight.position.x += 40 * Math.sin(Math.sin(tick));
+    pointLight.position.x += 10 * Math.cos(tick);
     console.log(pointLight.x);
     
     // Draw the scene
