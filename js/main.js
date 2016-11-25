@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * *
- *  Main.js
+ *  main.js
  *
  *  An attempt at a 3D game engine in JavaScript
  *  using WebGL and Three.js
