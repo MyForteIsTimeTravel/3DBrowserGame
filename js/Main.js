@@ -1,71 +1,132 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * *
  *  Main.js
  *
- *  An attempt at a 3D  game engine in JavaScript
+ *  An attempt at a 3D game engine in JavaScript
  *  using WebGL and Three.js
  *
  *  Ryan Needham
  * * * * * * * * * * * * * * * * * * * * * * * * * * */
 // Window Properties
-const WIDTH     = window.innerWidth;
-const HEIGHT    = window.innerHeight;
-const centralX  = WIDTH / 2;
-const centralY  = HEIGHT / 2;
-const container = document.querySelector('#cont');
+const WIDTH     = window.innerWidth
+const HEIGHT    = window.innerHeight
+const centralX  = WIDTH / 2
+const centralY  = HEIGHT / 2
+const container = document.querySelector('#cont')
 
 /* * * * * * * * * * * * * *
  * Input Handling
  * * * * * * * * * * * * * */
-var mouseX;
-var mouseY;
-var lastMouseX;
-var lastMouseY;
-var deadZone = 64;
+var lockable = 
+    'pointerLockElement'       in document || 
+    'mozPointerLockElement'    in document || 
+    'webkitPointerLockElement' in document
+
+function captureMouse() {
+    if (lockable) {
+        console.log("Mouse Lock available")
+
+        // DEFINE CALLBACKS
+        function changeCallback () {
+            var moveCallback = updateMouseMovement;
+            if (document.pointerLockElement       === container ||
+                document.mozPointerLockElement    === container ||
+                document.webkitPointerLockElement === container) {
+                // Enable the mousemove listener
+                document.addEventListener("mousemove", moveCallback, false)
+                document.getElementById("playing").innerHTML="playing..."
+                container.style.filter = "blur(0px)"
+                
+            } else {
+                // Disable the mousemove listener
+                document.removeEventListener("mousemove", moveCallback, false)
+                document.getElementById("playing").innerHTML="Click to play"
+                container.style.filter = "blur(12px)"
+                                
+                // stop drift
+                mouseMovementX = 0
+                mouseMovementY = 0
+            }
+        }
+
+        var errorCallback = function (event) {console.log("nope :(")}
+        
+        // Mouse Lock Status Change Listeners
+        document.addEventListener('pointerlockchange',       changeCallback, false)
+        document.addEventListener('mozpointerlockchange',    changeCallback, false)
+        document.addEventListener('webkitpointerlockchange', changeCallback, false)
+
+        // Mouse Lock Error Change Listeners
+        document.addEventListener('pointerlockerror',       errorCallback, false)
+        document.addEventListener('mozpointerlockerror',    errorCallback, false)
+        document.addEventListener('webkitpointerlockerror', errorCallback, false)
+
+        // Ask the browser to lock the pointer
+        container.requestPointerLock = 
+            container.requestPointerLock ||
+            container.mozRequestPointerLock ||
+            container.webkitRequestPointerLock
+
+        container.requestPointerLock()
+    }
+    
+    else {
+        
+        document.getElementById("heading").innerHTML="Sorry..."
+        document.getElementById("playing").innerHTML="required APIs aren't supported by your browser"
+    }
+}
+
+var mouseMovementX
+var mouseMovementY
 
 // Keyboard Input Parameters
-var wDown = false;
-var aDown = false;
-var sDown = false;
-var dDown = false;
+var shift = false
+var wDown = false
+var aDown = false
+var sDown = false
+var dDown = false
 
 /* * * * * * * * * * * * * *
  * Setup WebGL stuff
  * * * * * * * * * * * * * */
-const VIEW_ANGLE = 45;
-const ASPECT     = WIDTH / HEIGHT;
-const NEAR       = 0.1;
-const FAR        = 10000;
+const VIEW_ANGLE = 45
+const ASPECT     = WIDTH / HEIGHT
+const NEAR       = 0.1
+const FAR        = 10000
+var lookVelocity = new THREE.Vector3(0, 0, -1)
 
-const renderer = new THREE.WebGLRenderer();
+const renderer = new THREE.WebGLRenderer()
 const camera   = new THREE.PerspectiveCamera(
     VIEW_ANGLE,
     ASPECT,
     NEAR,
     FAR
-);
+)
 
-const scene      = new THREE.Scene();
-scene.background = new THREE.Color( 0x202020 );
-scene.add(camera);
+const scene      = new THREE.Scene()
+scene.background = new THREE.Color(0x202020)
+scene.add(camera)
+
+camera.lookAt(lookVelocity)
 
 // start rendering
-renderer.setSize(WIDTH, HEIGHT);
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type    = THREE.PCFSoftShadowMap;
+renderer.setSize(WIDTH, HEIGHT)
+renderer.shadowMap.enabled = true
+renderer.shadowMap.type    = THREE.PCFSoftShadowMap
 
 // attach to container
-container.appendChild(renderer.domElement);
+container.appendChild(renderer.domElement)
 
 /**
  * Lighting Stuff
  */
-const pointLight = new THREE.PointLight(0xFFFFFF);
-pointLight.position.x = 10;
-pointLight.position.y = 300;
-pointLight.position.z = 145;
-pointLight.rotation   = 20 * (Math.PI / 180);
-pointLight.castShadow = true;
-scene.add(pointLight);
+const pointLight = new THREE.PointLight(0xFFFFFF)
+pointLight.position.x = 10
+pointLight.position.y = 300
+pointLight.position.z = 145
+pointLight.rotation   = 20 * (Math.PI / 180)
+pointLight.castShadow = true
+scene.add(pointLight)
 
 /* * * * * * * * * * * * * * * *
  * World Objects
@@ -79,106 +140,128 @@ const object_1 = new THREE.Mesh(
     new THREE.MeshLambertMaterial({color: 0x990000})    // shader
 );
 
-object_1.castShadow     = true;
-object_1.receiveShadow  = true;
-object_1.position.y     = 46;
-object_1.position.z     = -300;
+object_1.castShadow     = true
+object_1.receiveShadow  = true
+object_1.position.y     = 46
+object_1.position.z     = -300
 scene.add(object_1);
 
 const object_2 = new THREE.Mesh(
-    new THREE.CubeGeometry(48, 48, 48),  // Mesh
-    new THREE.MeshLambertMaterial({color: 0x800000})    // shader
+    new THREE.CubeGeometry(48, 48, 48),                 // Mesh
+    new THREE.MeshLambertMaterial({color: 0x111111})    // shader
 );
 
-object_2.castShadow     = true;
-object_2.receiveShadow  = true;
-object_2.position.x    -= 200;
-object_2.position.y     = 40;
-object_2.position.z     = -500;
-scene.add(object_2);
+object_2.castShadow     = true
+object_2.receiveShadow  = true
+object_2.position.x    -= 200
+object_2.position.y     = 40
+object_2.position.z     = -500
+scene.add(object_2)
 
 const object_3 = new THREE.Mesh(
-    new THREE.CubeGeometry(48, 48, 48),
-    new THREE.MeshLambertMaterial({color: 0x800000})    // shader
-);
+    new THREE.CubeGeometry(48, 48, 48),                 // Mesh
+    new THREE.MeshLambertMaterial({color: 0x111111})    // shader
+)
 
-object_3.castShadow     = true;
+object_3.castShadow     = true
 object_3.receiveShadow  = true
-object_3.position.x    += 200;
-object_3.position.y     = 40;
-object_3.position.z     = -500;
+object_3.position.x    += 200
+object_3.position.y     = 40
+object_3.position.z     = -500
 scene.add(object_3);
 
 const floor = new THREE.Mesh ( 
     new THREE.PlaneGeometry(WIDTH * 2, WIDTH * 2, 50, 50), 
-    // Wireframe and Fill
     new THREE.MeshLambertMaterial( { color: 0xAAAAAA, side: THREE.DoubleSide})
-);
+)
 
-floor.receiveShadow = true;
-floor.position.y    = -20;
-floor.rotation.x    = 90 * (Math.PI / 180);
-scene.add(floor);
+floor.receiveShadow = true
+floor.position.y    = -20
+floor.rotation.x    = 90 * (Math.PI / 180)
+scene.add(floor)
 
 /* * * * * * * * * * * * * * * *
  * Handle Input
  * * * * * * * * * * * * * * * */
-function moveCallback (event) {
-    lastMouseX = mouseX;
-    lastMouseY = mouseY;
-    
-    mouseX = event.clientX;// - lastMouseX;
-    mouseY = event.clientY;// - lastMouseY;
+function updateMouseMovement (event) {    
+    mouseMovementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0
+    mouseMovementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0
 }
 
 function updateKeyDown (event) {
     switch (event.keyCode) {
-        case 87: wDown = true; break;
-        case 65: aDown = true; break;
-        case 83: sDown = true; break;
-        case 68: dDown = true; break;
+        case 16: shift = true; break
+        case 87: wDown = true; break
+        case 65: aDown = true; break
+        case 83: sDown = true; break
+        case 68: dDown = true; break
     }
     
     if (event.keyCode == 27) {
-
+        // Ask the browser to release the pointer
+        document.exitPointerLock = 
+            document.exitPointerLock ||
+            document.mozExitPointerLock ||
+            document.webkitExitPointerLock
+        
+        document.exitPointerLock()
     }
+    
+    console.log(event.keyCode)
 }
 
 function updateKeyUp (event) {
     switch (event.keyCode) {
-        case 87: wDown = false; break;
-        case 65: aDown = false; break;
-        case 83: sDown = false; break;
-        case 68: dDown = false; break;
+        case 16: shift = false; break
+        case 87: wDown = false; break
+        case 65: aDown = false; break
+        case 83: sDown = false; break
+        case 68: dDown = false; break
     } 
 }
 
 /* * * * * * * * * * * * * * * *
  * ON UPDATE
  * * * * * * * * * * * * * * * */
-var tick = 0;
-function update () {
-    tick += 1;
-    
-    // check input
-    if (wDown) { camera.translateZ(-4); }
-    if (aDown) { camera.translateX(-4); }
-    if (sDown) { camera.translateZ(4);  }
-    if (dDown) { camera.translateX(4);  }
-    
-    if (mouseX > centralX + deadZone) { camera.rotation.y -= 0.0082;}
-    if (mouseX < centralX - deadZone) { camera.rotation.y += 0.0082;}
-    
-    // rotate objects
-    object_1.position.y += Math.cos(tick / 10);
-    object_2.rotation.y += 0.005;
-    object_3.rotation.y -= 0.005;
-    
-    // Draw the scene
-    renderer.render(scene, camera); 
+var paused = false
+var tick = 0
 
+function update () {
+    if (!paused) {
+        nextTick();
+    
+        // movement
+        if (wDown) camera.translateZ(-4)
+        if (aDown) camera.translateX(-4)
+        if (sDown) camera.translateZ(4) 
+        if (dDown) camera.translateX(4)
+        
+        // crouch
+        if (shift) camera.position.y = -16; else camera.position.y = 0;
+
+        // look
+        var velocity = mouseMovementX * 0.002
+        if (mouseMovementX > 0) {camera.rotation.y -= velocity}
+        if (mouseMovementX < 0) {camera.rotation.y -= velocity}
+        
+        // animate objects
+        object_1.position.y += Math.cos(tick / 10)
+        object_2.rotation.y += 0.005
+        object_3.rotation.y -= 0.005
+
+        // Draw the scene
+        renderer.render(scene, camera)
+    }
+    
     // see you again soon
-    requestAnimationFrame(update);
+    requestAnimationFrame(update)
+}
+
+function nextTick () {
+    switch (tick == Number.MAX_SAFE_INTEGER) {
+        case true:  tick = 0; break
+        case false: tick++;   break
+    }
 }
 
 // Entry Point
