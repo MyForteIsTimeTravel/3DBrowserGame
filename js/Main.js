@@ -5,6 +5,9 @@ const WIDTH     = window.innerWidth;
 const HEIGHT    = window.innerHeight;
 const container = document.querySelector('#cont');
 
+var mouseX = 0;
+var mouseY = 0;
+
 /* * * * * * * * * * * * * * * *
  * Setup WebGL stuff
  * * * * * * * * * * * * * * * */
@@ -78,6 +81,13 @@ sphereThree.position.y = 18;
 sphereThree.position.z = -500;
 scene.add(sphereThree);
 
+/* * * * * * * * * * * * * * * *
+ * Handle Input
+ * * * * * * * * * * * * * * * */
+function updateInput (event) {
+    mouseX = event.clientX
+    mouseY = event.clientY
+}
 
 /* * * * * * * * * * * * * * * *
  * ON UPDATE
@@ -86,10 +96,10 @@ function update () {
     // timer
     var date = new Date();
     var tick = date.getSeconds();
-    
+
     // animate the light source
-    pointLight.position.x += 10 * Math.cos(tick);
-    console.log(pointLight.x);
+    pointLight.position.x = mouseX;
+    pointLight.position.y = mouseY;
     
     // Draw the scene
     renderer.render(scene, camera); 
