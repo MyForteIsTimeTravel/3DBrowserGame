@@ -102,7 +102,7 @@ const NEAR       = 0.1
 const FAR        = 10000
 var lookVelocity = new THREE.Vector3(0, 0, -1)
 
-const renderer = new THREE.WebGLRenderer()
+const renderer = new THREE.WebGLRenderer({antialias: true})
 const camera   = new THREE.PerspectiveCamera(
     VIEW_ANGLE,
     ASPECT,
