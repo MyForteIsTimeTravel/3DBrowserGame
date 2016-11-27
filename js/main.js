@@ -62,8 +62,8 @@ const SEGMENTS  = 16;
 const RINGS     = 16;
 
 const object_1 = new THREE.Mesh(
-    new THREE.SphereGeometry(RADIUS, SEGMENTS, RINGS),  // Mesh
-    new THREE.MeshLambertMaterial({color: 0xFF9800})    // shader
+    new THREE.SphereGeometry(RADIUS, SEGMENTS, RINGS),  // Vertex Shader
+    new THREE.MeshLambertMaterial({color: 0xFF9800})    // Fragment Shader
 );
 
 object_1.castShadow     = true
@@ -73,8 +73,8 @@ object_1.position.z     = -100
 scene.add(object_1);
 
 const object_2 = new THREE.Mesh(
-    new THREE.CubeGeometry(48, 48, 48),                 // Mesh
-    new THREE.MeshLambertMaterial({color: 0x111111})    // shader
+    new THREE.CubeGeometry(48, 48, 48),                 // Vertex Shader
+    new THREE.MeshLambertMaterial({color: 0x111111})    // Fragment Shader
 );
 
 object_2.castShadow     = true
@@ -85,8 +85,8 @@ object_2.position.z     = -200
 scene.add(object_2)
 
 const object_3 = new THREE.Mesh(
-    new THREE.CubeGeometry(48, 48, 48),                 // Mesh
-    new THREE.MeshLambertMaterial({color: 0x111111})    // shader
+    new THREE.CubeGeometry(48, 48, 48),                 // Vertex Shader
+    new THREE.MeshLambertMaterial({color: 0x111111})    // Fragment Shader
 )
 
 object_3.castShadow     = true
@@ -97,8 +97,8 @@ object_3.position.z     = -200
 scene.add(object_3);
 
 const object_4 = new THREE.Mesh (
-    new THREE.TorusGeometry( 20, 6, 32, 200 ),
-    new THREE.MeshLambertMaterial({color: 0x111111})
+    new THREE.TorusGeometry( 20, 6, 32, 200 ),          // Vertex Shader
+    new THREE.MeshLambertMaterial({color: 0x111111})    // Fragment Shader
 )
 
 object_4.castShadow = true
@@ -109,8 +109,10 @@ object_4.position.z = -40
 scene.add(object_4)
 
 const floor = new THREE.Mesh ( 
-    new THREE.PlaneGeometry(1500, 1500, 50, 50), 
-    new THREE.MeshLambertMaterial( { color: 0x4E342E, side: THREE.DoubleSide})
+    new THREE.PlaneGeometry(1500, 1500, 50, 50),          // Vertex Shader
+    new THREE.MeshLambertMaterial( {                      // Fragment Shader
+        color: 0x4E342E, side: THREE.DoubleSide
+    })
 )
 
 floor.receiveShadow = true

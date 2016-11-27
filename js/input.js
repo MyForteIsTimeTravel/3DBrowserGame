@@ -128,9 +128,9 @@ function updateKeyDown (event) {
         case 27:
             // Ask the browser to release the pointer
             document.exitPointerLock = 
-            document.exitPointerLock ||
-            document.mozExitPointerLock ||
-            document.webkitExitPointerLock
+                document.exitPointerLock ||
+                document.mozExitPointerLock ||
+                document.webkitExitPointerLock
         
             document.exitPointerLock()
             break
