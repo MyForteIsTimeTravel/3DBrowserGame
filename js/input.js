@@ -13,11 +13,16 @@ var lockable =
 
 var mouseMovementX = 0
 var mouseMovementY = 0
-var shift          = false
-var wDown          = false
-var aDown          = false
-var sDown          = false
-var dDown          = false
+
+var shift = false
+var wKey = false
+var aKey = false
+var sKey = false
+var dKey = false
+var upKey = false
+var downKey = false
+var leftKey = false
+var rightKey = false
 
 /** 
  *  changeCallback
@@ -121,10 +126,14 @@ function updateMouseMovement (event) {
 function updateKeyDown (event) {
     switch (event.keyCode) {
         case 16: shift = true; break
-        case 87: wDown = true; break
-        case 65: aDown = true; break
-        case 83: sDown = true; break
-        case 68: dDown = true; break
+        case 37: leftKey = true; break
+        case 38: upKey = true; break
+        case 39: rightKey = true; break
+        case 40: downKey = true; break
+        case 87: wKey = true; break
+        case 65: aKey = true; break
+        case 83: sKey = true; break
+        case 68: dKey = true; break
         case 27:
             // Ask the browser to release the pointer
             document.exitPointerLock = 
@@ -140,18 +149,23 @@ function updateKeyDown (event) {
 function updateKeyUp (event) {
     switch (event.keyCode) {
         case 16: shift = false; break
-        case 87: wDown = false; break
-        case 65: aDown = false; break
-        case 83: sDown = false; break
-        case 68: dDown = false; break
+        case 37: leftKey = false; break
+        case 38: upKey = false; break
+        case 39: rightKey = false; break
+        case 40: downKey = false; break
+        case 87: wKey = false; break
+        case 65: aKey = false; break
+        case 83: sKey = false; break
+        case 68: dKey = false; break
+        case 27: break
     } 
 }
 
 function updateInput () {
-    if (wDown) camera.translateZ(-4)
-    if (aDown) camera.translateX(-4)
-    if (sDown) camera.translateZ(4) 
-    if (dDown) camera.translateX(4)
+    if (wKey || upKey) camera.translateZ(-4)
+    if (aKey || leftKey) camera.translateX(-4)
+    if (sKey || downKey) camera.translateZ(4) 
+    if (dKey || rightKey) camera.translateX(4)
 
     // crouch
     if (shift) camera.position.y = -16; else camera.position.y = 0;

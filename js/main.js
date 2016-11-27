@@ -6,16 +6,26 @@
  *
  *  Ryan Needham
  * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-const WIDTH     = window.innerWidth
-const HEIGHT    = window.innerHeight
 const container = document.querySelector('#cont')
+var   width     = window.innerWidth
+var   height    = window.innerHeight
+
+// handle window resizing
+window.addEventListener('resize', resizeCallback, false);
+function resizeCallback () {
+    width = window.innerWidth
+    height = window.innerHeight
+    
+    camera.aspect = width/height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(width, height);
+}
 
 /* * * * * * * * * * * * * *
  * Setup WebGL Rendering
  * * * * * * * * * * * * * */
 const VIEW_ANGLE = 45
-const ASPECT     = WIDTH / HEIGHT
+const ASPECT     = width / height
 const NEAR       = 0.1
 const FAR        = 10000
 
@@ -34,7 +44,7 @@ scene.add(camera)
 camera.rotation.y = -10 * (Math.PI / 180)
 camera.position.z = 360
 
-renderer.setSize(WIDTH, HEIGHT)
+renderer.setSize(width, height)
 renderer.shadowMap.enabled = true
 renderer.shadowMap.type    = THREE.PCFSoftShadowMap
 
@@ -45,13 +55,11 @@ container.appendChild(renderer.domElement)
  * Lighting
  * * * * * * * * * * * * * */
 const pointLight = new THREE.PointLight(0xFFFFFF)
-
 pointLight.position.x = 10
 pointLight.position.y = 300
 pointLight.position.z = 145
 pointLight.rotation   = 20 * (Math.PI / 180)
 pointLight.castShadow = true
-
 scene.add(pointLight)
 
 /* * * * * * * * * * * * * * * *
@@ -101,11 +109,11 @@ const object_4 = new THREE.Mesh (
     new THREE.MeshLambertMaterial({color: 0x111111})    // Fragment Shader
 )
 
-object_4.castShadow = true
+object_4.castShadow    = true
 object_4.receiveShadow = true
-object_4.position.x += 300 
-object_4.position.y = 60
-object_4.position.z = -40
+object_4.position.x   += 300 
+object_4.position.y    = 60
+object_4.position.z    = -40
 scene.add(object_4)
 
 const floor = new THREE.Mesh ( 
