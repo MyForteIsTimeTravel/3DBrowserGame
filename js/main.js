@@ -116,6 +116,17 @@ object_4.position.y    = 60
 object_4.position.z    = -40
 scene.add(object_4)
 
+const playerBody = new THREE.Mesh (
+    new THREE.CylinderGeometry(5, 5, 20, 32),
+    new THREE.MeshLambertMaterial({color: 0x000000})
+)
+
+playerBody.castShadow = true
+playerBody.position.x = camera.position.x
+playerBody.position.y = camera.position.y
+playerBody.position.z = camera.position.z
+scene.add(playerBody)
+
 const floor = new THREE.Mesh ( 
     new THREE.PlaneGeometry(1500, 1500, 50, 50),          // Vertex Shader
     new THREE.MeshLambertMaterial( {                      // Fragment Shader
@@ -144,6 +155,11 @@ function update () {
         object_2.rotation.y += 0.005
         object_3.rotation.y -= 0.005
         object_4.rotation.y += 0.05
+        
+        // bind body to player
+        playerBody.position.x = camera.position.x
+        playerBody.position.y = camera.position.y
+        playerBody.position.z = camera.position.z
 
         // Draw the scene
         renderer.render(scene, camera)

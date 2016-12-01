@@ -14,14 +14,14 @@ var lockable =
 var mouseMovementX = 0
 var mouseMovementY = 0
 
-var shift = false
-var wKey = false
-var aKey = false
-var sKey = false
-var dKey = false
-var upKey = false
-var downKey = false
-var leftKey = false
+var shift    = false
+var wKey     = false
+var aKey     = false
+var sKey     = false
+var dKey     = false
+var upKey    = false
+var downKey  = false
+var leftKey  = false
 var rightKey = false
 
 /** 
@@ -125,15 +125,15 @@ function updateMouseMovement (event) {
 
 function updateKeyDown (event) {
     switch (event.keyCode) {
-        case 16: shift = true; break
-        case 37: leftKey = true; break
-        case 38: upKey = true; break
+        case 16: shift    = true; break
+        case 37: leftKey  = true; break
+        case 38: upKey    = true; break
         case 39: rightKey = true; break
-        case 40: downKey = true; break
-        case 87: wKey = true; break
-        case 65: aKey = true; break
-        case 83: sKey = true; break
-        case 68: dKey = true; break
+        case 40: downKey  = true; break
+        case 87: wKey     = true; break
+        case 65: aKey     = true; break
+        case 83: sKey     = true; break
+        case 68: dKey     = true; break
         case 27:
             // Ask the browser to release the pointer
             document.exitPointerLock = 
@@ -148,15 +148,15 @@ function updateKeyDown (event) {
 
 function updateKeyUp (event) {
     switch (event.keyCode) {
-        case 16: shift = false; break
-        case 37: leftKey = false; break
-        case 38: upKey = false; break
+        case 16: shift    = false; break
+        case 37: leftKey  = false; break
+        case 38: upKey    = false; break
         case 39: rightKey = false; break
-        case 40: downKey = false; break
-        case 87: wKey = false; break
-        case 65: aKey = false; break
-        case 83: sKey = false; break
-        case 68: dKey = false; break
+        case 40: downKey  = false; break
+        case 87: wKey     = false; break
+        case 65: aKey     = false; break
+        case 83: sKey     = false; break
+        case 68: dKey     = false; break
         case 27: break
     } 
 }
