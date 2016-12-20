@@ -115,6 +115,39 @@ function captureMouse() {
     }
 }
 
+// example: https://github.com/luser/gamepadtest
+
+var gamepads = {};
+
+function handleGamepad (event, connecting) {
+    var gamepad = event.gamepad;
+    
+    if (connecting) {
+        gamepads[gamepad.index] = gamepad;
+    } else {
+        delete gamepad[gamepad.index];
+    }
+}
+
+function pollGamepads () {
+    var controller = gamepads[0];
+    
+    if (typeof(controller) == "object") {
+        console.log("button pressed");
+    }
+}
+
+// listeners
+window.addEventListener("gamepadconnected", function (e) {
+    console.log("gamepad connected");
+    handleGamepad(e, true);
+}, false);
+
+window.addEventListener("gamepaddisconnected", function (e) {
+    console.log("gamepad disconnected");
+    handleGamepad(e, false);
+}, false);
+
 /* * * * * * * * * * * * * * * *
  * Handle Input Events
  * * * * * * * * * * * * * * * */
@@ -162,6 +195,8 @@ function updateKeyUp (event) {
 }
 
 function updateInput () {
+    pollGamepads();
+    
     if (wKey || upKey) camera.translateZ(-4)
     if (aKey || leftKey) camera.translateX(-4)
     if (sKey || downKey) camera.translateZ(4) 
